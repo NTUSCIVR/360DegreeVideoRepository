@@ -78,12 +78,11 @@ public class QuestionnaireInput : MonoBehaviour
         {
             // Start Counting down
             CountDownTimer -= Time.deltaTime;
-            CountDown.text = CountDownTimer.ToString("F0");
+            CountDown.text = Mathf.CeilToInt(CountDownTimer).ToString();
 
             // Scale down every second
             CountDownScale -= Time.deltaTime;
             CountDown.transform.localScale = new Vector3(CountDownScale, CountDownScale, CountDownScale);
-            Debug.Log(CountDownScale);
 
             // Pop back to full size every next second
             if(CountDownScale <= 0.0f)

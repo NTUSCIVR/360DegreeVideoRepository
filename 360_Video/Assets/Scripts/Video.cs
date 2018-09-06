@@ -41,7 +41,7 @@ public class Video : MonoBehaviour
 
     private void LoadVideos()
     {
-        DirectoryInfo directory = new DirectoryInfo(Application.dataPath + "/Imports/Videos/");
+        DirectoryInfo directory = new DirectoryInfo(@"C:\360DegreeVideos\");
 
         // Load .mp4 videos from Assets/Imports/Videos/ and add into Url list
         foreach (var file in directory.GetFiles("*.mp4", SearchOption.AllDirectories))
