@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Video;
 using TMPro;
+using System.IO;
 
 public class QuestionnaireInput : MonoBehaviour
 {
@@ -16,8 +17,11 @@ public class QuestionnaireInput : MonoBehaviour
     // Questionnaire objects
     public GameObject QuestionnaireObject;
     public GameObject Choice;
+    public DataCollector dataCollector;
+    public Video videoScript;
     public GameObject[] Targets;
     private int ChoiceIndex = 0;
+
 
     // Device property to provide easy access to controller.
     // Uses the tracked object's index to return the controller's input
@@ -30,6 +34,15 @@ public class QuestionnaireInput : MonoBehaviour
     void Start()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
+    }
+
+    private void RecordData()
+    {
+        StreamWriter sw = File.AppendText(dataCollector.GetCSVPath(DataCollector.DataToRecord.RatingVideo));
+        string url = videoPlayer.url;
+        string rating = (ChoiceIndex - 2).ToString();
+        sw.WriteLine(url + "," + rating);
+        sw.Close();
     }
 
     // Update is called once per frame
@@ -62,6 +75,8 @@ public class QuestionnaireInput : MonoBehaviour
             // Confirm the selection
             if(Controller.GetHairTriggerDown())
             {
+                RecordData();
+                videoScript.ChangeToNextVideo();
                 if (videoPlayer.enabled)
                 {
                     CountDown.gameObject.SetActive(true);

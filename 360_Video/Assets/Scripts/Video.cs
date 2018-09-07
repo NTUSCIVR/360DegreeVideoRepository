@@ -95,18 +95,21 @@ public class Video : MonoBehaviour
             videoUrlsToPlay.Remove(videoUrlsToPlay[0]);
             videoUrlsToPlay.TrimExcess();
         }
+        Questionnaire.SetActive(true);
+    }
 
+    public void ChangeToNextVideo()
+    {
         // When still have video clips to play
         if (videoUrlsToPlay.Count >= 1)
         {
             // Change video clip to the next one
-            _videoPlayer.url = videoUrlsToPlay[0];
+            videoPlayer.url = videoUrlsToPlay[0];
         }
         else
         {
-            _videoPlayer.enabled = false;
+            videoPlayer.enabled = false;
         }
-        Questionnaire.SetActive(true);
     }
 
     // Update is called once per frame
