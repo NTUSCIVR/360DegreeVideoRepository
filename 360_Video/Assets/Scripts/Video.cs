@@ -8,6 +8,11 @@ public class Video : MonoBehaviour
     public VideoPlayer videoPlayer;
     public int videosToPlay = 3;
     public GameObject Questionnaire;
+
+    [Header("Controller Models")]
+    public GameObject ContLeft;
+    public GameObject ContRight;
+
     private List<string> videoUrls;
     private List<string> videoUrlsToPlay;
 
@@ -115,13 +120,23 @@ public class Video : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-        // Skip to second last second
 		if (videoPlayer.isPlaying)
         {
-            if(Input.GetKeyDown(KeyCode.Space))
+            // Hide Controller models
+            ContLeft.SetActive(false);
+            ContRight.SetActive(false);
+
+            // Skip to second last second
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 FinishPlaying(videoPlayer);
             }
+        }
+        else
+        {
+            // Show Controller models
+            ContLeft.SetActive(true);
+            ContRight.SetActive(true);
         }
 	}
 }
