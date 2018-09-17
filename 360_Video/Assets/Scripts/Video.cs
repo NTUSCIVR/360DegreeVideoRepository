@@ -5,11 +5,14 @@ using UnityEngine.Video;
 
 public class Video : MonoBehaviour
 {
+    [Tooltip("Sphere that envelops [CameraRig]")]
     public VideoPlayer videoPlayer;
+    [Tooltip("Default: 3 videos")]
     public int videosToPlay = 3;
+    [Tooltip("Empty GameObject that holds Questionnaire under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas")]
     public GameObject Questionnaire;
-
-    [Header("Controller Models")]
+    
+    [Header("Controller Models under [CameraRig]")]
     public GameObject ContLeft;
     public GameObject ContRight;
 
@@ -19,9 +22,6 @@ public class Video : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        // Allow skip frames
-        videoPlayer.skipOnDrop = true;
-
         // Load videos from Assets/Imports/Videos
         videoUrls = new List<string>();
         LoadVideos();
@@ -92,6 +92,7 @@ public class Video : MonoBehaviour
 
     private void FinishPlaying(VideoPlayer _videoPlayer)
     {
+        // Stop playing video
         _videoPlayer.Stop();
 
         if (videoUrlsToPlay.Count >= 1)
@@ -100,6 +101,7 @@ public class Video : MonoBehaviour
             videoUrlsToPlay.Remove(videoUrlsToPlay[0]);
             videoUrlsToPlay.TrimExcess();
         }
+        // Allow Rating
         Questionnaire.SetActive(true);
     }
 
@@ -122,7 +124,7 @@ public class Video : MonoBehaviour
     {
 		if (videoPlayer.isPlaying)
         {
-            // Hide Controller models
+            // Hide Controller models when video is playing
             ContLeft.SetActive(false);
             ContRight.SetActive(false);
 

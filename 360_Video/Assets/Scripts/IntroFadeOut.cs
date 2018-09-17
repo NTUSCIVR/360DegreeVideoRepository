@@ -5,8 +5,10 @@ using TMPro;
 public class IntroFadeOut : MonoBehaviour
 {
     // Rate of Fading out
+    [Tooltip("Default: 0.15f")]
     public float FadingRate = 0.15f;
 
+    [Header("Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas")]
     // Reference to Briefing and its child/components
     public GameObject Briefing;
     private Image Brief_Panel;

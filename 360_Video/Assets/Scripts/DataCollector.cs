@@ -4,16 +4,20 @@ using TMPro;
 
 public class DataCollector : MonoBehaviour
 {
-    public TMP_InputField inputField;
-    
     private string dataID = "";
 
+    [HideInInspector]
     public bool startRecording = false;
 
+    [Tooltip("Default: 1.0f")]
     public float dataRecordInterval = 1f;
     private float time = 0f;
-    
+
+    [Tooltip("Camera(eye) under [CameraRig] -> Camera(head)")]
     public GameObject user;
+
+    [Header("Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas")]
+    public TMP_InputField inputField;
     public GameObject Briefing;
 
     public enum DataToRecord
@@ -46,13 +50,19 @@ public class DataCollector : MonoBehaviour
 
     public void Start360MovieTheatre()
     {
+        // Create Folder and CSV for user based on input
         dataID = inputField.text;
         CreateFolder();
+
+        // Start recording Head Movement
         startRecording = true;
+
+        // Show Briefing and Hide InputField
         Briefing.SetActive(true);
         inputField.gameObject.SetActive(false);
     }
 
+    // Generate Head Movement Data
     private string GenerateData()
     {
         string data = "";
@@ -125,12 +135,17 @@ public class DataCollector : MonoBehaviour
 #endif
     }
 
+    // Replace existing CSV or Create new CSV
     private void CreateCSV(DataToRecord dataToRecord)
     {
+        // Found same CSV
         if (File.Exists(GetCSVPath(dataToRecord)))
         {
+            // Delete the CSV
             File.Delete(GetCSVPath(dataToRecord));
         }
+
+        // Create new CSV and Write in Data Headers on first line
         StreamWriter output = File.CreateText(GetCSVPath(dataToRecord));
         switch (dataToRecord)
         {
@@ -144,6 +159,7 @@ public class DataCollector : MonoBehaviour
         output.Close();
     }
 
+    // Change "letter" in "str" to "toBeLetter"
     private string ChangeLetters(string str, char letter, char toBeLetter)
     {
         char[] ret = str.ToCharArray();

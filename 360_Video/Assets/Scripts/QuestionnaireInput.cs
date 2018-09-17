@@ -8,7 +8,14 @@ public class QuestionnaireInput : MonoBehaviour
     // Reference to the object being tracked. // Controller, in this case.
     private SteamVR_TrackedObject trackedObj;
 
+    [Tooltip("Sphere that envelops [CameraRig]")]
     public VideoPlayer videoPlayer;
+
+    [Header("Script GameObject")]
+    public DataCollector dataCollector;
+    public Video videoScript;
+
+    [Header("Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas")]
     public GameObject Ending;
     public TextMeshProUGUI CountDown;
     private float CountDownTimer = 5.0f;
@@ -16,9 +23,9 @@ public class QuestionnaireInput : MonoBehaviour
 
     // Questionnaire objects
     public GameObject QuestionnaireObject;
+    [Tooltip("Circle Image")]
     public GameObject Choice;
-    public DataCollector dataCollector;
-    public Video videoScript;
+    [Tooltip("Under Ring Images GameObject")]
     public GameObject[] Targets;
     private int ChoiceIndex = 0;
 
@@ -55,6 +62,7 @@ public class QuestionnaireInput : MonoBehaviour
             {
                 Vector2 touchPad = Controller.GetAxis();
 
+                // Right side
                 if (touchPad.x > 0.75f)
                 {
                     if(ChoiceIndex + 1 <= 4)
@@ -62,6 +70,7 @@ public class QuestionnaireInput : MonoBehaviour
                         ChoiceIndex += 1;
                     }
                 }
+                // Left side
                 else if (touchPad.x < -0.75f)
                 {
                     if (ChoiceIndex - 1 >= 0)
@@ -77,6 +86,8 @@ public class QuestionnaireInput : MonoBehaviour
             {
                 RecordData();
                 videoScript.ChangeToNextVideo();
+
+                // if still have video to play
                 if (videoPlayer.enabled)
                 {
                     CountDown.gameObject.SetActive(true);
