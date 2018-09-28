@@ -45,7 +45,7 @@ public class QuestionnaireInput : MonoBehaviour
 
     private void RecordData()
     {
-        StreamWriter sw = File.AppendText(dataCollector.GetCSVPath(DataCollector.DataToRecord.RatingVideo));
+        StreamWriter sw = File.AppendText(dataCollector.GetCSVPath(DataCollector.DataToRecord.RatingVideo, dataCollector.currentFolderPath));
         string url = videoPlayer.url;
         string rating = (ChoiceIndex - 2).ToString();
         sw.WriteLine(url + "," + rating);

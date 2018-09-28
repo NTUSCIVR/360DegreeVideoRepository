@@ -9,16 +9,19 @@ public class DataCollector : MonoBehaviour
     [HideInInspector]
     public bool startRecording = false;
 
-    [Tooltip("Default: 1.0f")]
+    [Tooltip("Time interval to collect Headset Position & Rotation. Default: 1.0f")]
     public float dataRecordInterval = 1f;
     private float time = 0f;
 
-    [Tooltip("Camera(eye) under [CameraRig] -> Camera(head)")]
+    [Tooltip("Headset. {Camera(eye) under [CameraRig] -> Camera(head)}")]
     public GameObject user;
 
-    [Header("Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas")]
+    [Header("ID Input Field. {Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas}")]
     public TMP_InputField inputField;
     public GameObject Briefing;
+
+    [HideInInspector]
+    public string currentFolderPath;
 
     public enum DataToRecord
     {
@@ -41,7 +44,7 @@ public class DataCollector : MonoBehaviour
             if (time > dataRecordInterval)
             {
                 time = 0;
-                StreamWriter sw = File.AppendText(GetCSVPath(DataToRecord.HeadMovement));
+                StreamWriter sw = File.AppendText(GetCSVPath(DataToRecord.HeadMovement, currentFolderPath));
                 sw.WriteLine(GenerateData());
                 sw.Close();
             }
@@ -82,41 +85,54 @@ public class DataCollector : MonoBehaviour
         return data;
     }
 
+    // Duplicates Folder with a (Duplicate Count) at the back of ID
     private string GetFolderPath()
     {
         string Folder = "/Data/";
-        
+
 #if UNITY_EDITOR
-        return Application.dataPath + Folder + dataID + "/";
+        string filePath = Application.dataPath + Folder + dataID;
+        int duplicateCounts = 0;
+        while (true)
+        {
+            if (Directory.Exists(filePath))
+            {
+                ++duplicateCounts;
+                filePath = Application.dataPath + Folder + dataID + "(" + duplicateCounts.ToString() + ")";
+            }
+            else
+                break;
+        }
+        return filePath;
 #elif UNITY_STANDALONE_WIN
-        return Application.dataPath + Folder + dataID + "/";
+        string filePath = Application.dataPath + Folder + dataID;
+        int duplicateCounts = 0;
+        while (true)
+        {
+            if (Directory.Exists(filePath))
+            {
+                ++duplicateCounts;
+                filePath = Application.dataPath + Folder + dataID + "(" + duplicateCounts.ToString() + ")";
+            }
+            else
+                break;
+        }
+        return filePath;
 #endif
     }
 
-    // Replace existing folder or Create new folder
+    // Duplicate or Create new folder
     private void CreateFolder()
     {
-        // Found same folder
-        if (Directory.Exists(GetFolderPath()))
-        {
-            // Delete files inside the folder first
-            foreach(FileInfo file in new DirectoryInfo(GetFolderPath()).GetFiles())
-            {
-                file.Delete();
-            }
-            // Delete the folder
-            Directory.Delete(GetFolderPath());
-        }
-
+        currentFolderPath = GetFolderPath();
         // Create new folder
-        Directory.CreateDirectory(GetFolderPath());
-        CreateCSV(DataToRecord.HeadMovement);
-        CreateCSV(DataToRecord.RatingVideo);
+        Directory.CreateDirectory(currentFolderPath);
+        CreateCSV(DataToRecord.HeadMovement, currentFolderPath);
+        CreateCSV(DataToRecord.RatingVideo, currentFolderPath);
     }
 
-    public string GetCSVPath(DataToRecord dataToRecord)
+    public string GetCSVPath(DataToRecord dataToRecord, string folderPath)
     {
-        string Folder = "/Data/";
         string File = "";
 
         switch(dataToRecord)
@@ -129,24 +145,17 @@ public class DataCollector : MonoBehaviour
                 break;
         }
 #if UNITY_EDITOR
-        return Application.dataPath + Folder + dataID + File + ".csv";
+        return folderPath + File + ".csv";
 #elif UNITY_STANDALONE_WIN
-        return Application.dataPath + Folder + dataID + File + ".csv";
+        return folderPath + File + ".csv";
 #endif
     }
 
-    // Replace existing CSV or Create new CSV
-    private void CreateCSV(DataToRecord dataToRecord)
+    // Create new CSV
+    private void CreateCSV(DataToRecord dataToRecord, string folderPath)
     {
-        // Found same CSV
-        if (File.Exists(GetCSVPath(dataToRecord)))
-        {
-            // Delete the CSV
-            File.Delete(GetCSVPath(dataToRecord));
-        }
-
         // Create new CSV and Write in Data Headers on first line
-        StreamWriter output = File.CreateText(GetCSVPath(dataToRecord));
+        StreamWriter output = File.CreateText(GetCSVPath(dataToRecord, folderPath));
         switch (dataToRecord)
         {
             case DataToRecord.HeadMovement:
