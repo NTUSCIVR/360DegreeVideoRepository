@@ -1,27 +1,27 @@
 ﻿using System.IO;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DataCollector : MonoBehaviour
 {
-    private string dataID = "";
+    public static DataCollector Instance;
+    
+    [Tooltip("Time interval to collect Headset Position & Rotation. Default: 1.0f")]
+    public float dataRecordInterval = 1f;
+    
+    [Header("ID Input Field. {Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas}")]
+    public InputField inputField;
 
     [HideInInspector]
     public bool startRecording = false;
-
-    [Tooltip("Time interval to collect Headset Position & Rotation. Default: 1.0f")]
-    public float dataRecordInterval = 1f;
-    private float time = 0f;
-
-    [Tooltip("Headset. {Camera(eye) under [CameraRig] -> Camera(head)}")]
+    [HideInInspector]
     public GameObject user;
-
-    [Header("ID Input Field. {Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas}")]
-    public TMP_InputField inputField;
-    public GameObject Briefing;
-
     [HideInInspector]
     public string currentFolderPath;
+
+    private string dataID = "";
+    private float time = 0f;
 
     public enum DataToRecord
     {
@@ -29,8 +29,14 @@ public class DataCollector : MonoBehaviour
         RatingVideo
     }
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     private void Start()
     {
+        Instance = this;
         // Allow input
         inputField.Select();
     }
@@ -60,9 +66,8 @@ public class DataCollector : MonoBehaviour
         // Start recording Head Movement
         startRecording = true;
 
-        // Show Briefing and Hide InputField
-        Briefing.SetActive(true);
-        inputField.gameObject.SetActive(false);
+        // Change to MainScene
+        SceneManager.LoadScene("MainScene");
     }
 
     // Generate Head Movement Data

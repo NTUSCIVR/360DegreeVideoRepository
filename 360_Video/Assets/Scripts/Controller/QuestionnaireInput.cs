@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.Video;
-using TMPro;
+﻿using TMPro;
 using System.IO;
+using UnityEngine;
+using UnityEngine.Video;
 
 public class QuestionnaireInput : MonoBehaviour
 {
@@ -11,15 +11,12 @@ public class QuestionnaireInput : MonoBehaviour
     [Tooltip("Sphere that envelops [CameraRig]")]
     public VideoPlayer videoPlayer;
 
-    [Header("Script GameObject")]
-    public DataCollector dataCollector;
+    [Header("In Script GameObject")]
     public Video videoScript;
 
     [Header("Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas")]
     public GameObject Ending;
     public TextMeshProUGUI CountDown;
-    private float CountDownTimer = 5.0f;
-    private float CountDownScale = 1.0f;
 
     // Questionnaire objects
     public GameObject QuestionnaireObject;
@@ -27,8 +24,11 @@ public class QuestionnaireInput : MonoBehaviour
     public GameObject Choice;
     [Tooltip("Under Ring Images GameObject")]
     public GameObject[] Targets;
-    private int ChoiceIndex = 0;
 
+    private DataCollector dataCollector;
+    private float CountDownTimer = 5.0f;
+    private float CountDownScale = 1.0f;
+    private int ChoiceIndex = 0;
 
     // Device property to provide easy access to controller.
     // Uses the tracked object's index to return the controller's input
@@ -41,6 +41,10 @@ public class QuestionnaireInput : MonoBehaviour
     void Start()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
+        if (DataCollector.Instance != null)
+        {
+            dataCollector = DataCollector.Instance;
+        }
     }
 
     private void RecordData()
@@ -116,13 +120,14 @@ public class QuestionnaireInput : MonoBehaviour
                 CountDownScale = 1.0f;
             }
             
-            if(CountDownTimer <= 0)
+            if(CountDownTimer <= 0.0f)
             {
                 // Reset Countdown then play next video
-                CountDown.gameObject.SetActive(false);
                 CountDownTimer = 5.0f;
                 CountDownScale = 1.0f;
+                CountDown.transform.localScale = new Vector3(CountDownScale, CountDownScale, CountDownScale);
                 videoPlayer.Play();
+                CountDown.gameObject.SetActive(false);
             }
         }
     }

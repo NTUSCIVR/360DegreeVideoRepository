@@ -1,7 +1,8 @@
 ﻿using System.IO;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class Video : MonoBehaviour
 {
@@ -19,7 +20,15 @@ public class Video : MonoBehaviour
     private List<string> videoUrls;
     private List<string> videoUrlsToPlay;
 
-    // Use this for initialization
+    private void Awake()
+    {
+        if (DataCollector.Instance != null)
+        {
+            //find the steamvr eye and assign it to data collector
+            DataCollector.Instance.user = FindObjectOfType<SteamVR_Camera>().gameObject;
+        }
+    }
+    
     void Start ()
     {
         // Load videos from Assets/Imports/Videos
@@ -119,6 +128,12 @@ public class Video : MonoBehaviour
         }
     }
 
+    private void Restart()
+    {
+        SceneManager.LoadScene("StartScene");
+        Destroy(DataCollector.Instance.gameObject);
+    }
+
     // Update is called once per frame
     void Update ()
     {
@@ -140,5 +155,11 @@ public class Video : MonoBehaviour
             ContLeft.SetActive(true);
             ContRight.SetActive(true);
         }
-	}
+
+        // Restart from start scene
+        if (Input.GetKey(KeyCode.R))
+        {
+            Restart();
+        }
+    }
 }
