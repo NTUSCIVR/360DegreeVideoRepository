@@ -10,13 +10,17 @@ public class DataCollector : MonoBehaviour
     [Tooltip("Time interval to collect Headset Position & Rotation. Default: 1.0f")]
     public float dataRecordInterval = 1f;
     
-    [Header("ID Input Field. {Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas}")]
+    [Header("Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas")]
+    [Tooltip("ID Input Field")]
     public InputField inputField;
+    public InputField VideoIdInputField;
 
     [HideInInspector]
     public bool startRecording = false;
     [HideInInspector]
     public GameObject user;
+    [HideInInspector]
+    public int VideoID;
     [HideInInspector]
     public string currentFolderPath;
 
@@ -57,11 +61,24 @@ public class DataCollector : MonoBehaviour
         }
 	}
 
-    public void Start360MovieTheatre()
+    public void ProceedToSelectVideo()
     {
         // Create Folder and CSV for user based on input
         dataID = inputField.text;
         CreateFolder();
+
+        // Allow input
+        VideoIdInputField.gameObject.SetActive(true);
+        VideoIdInputField.Select();
+    }
+
+    public void Start360MovieTheatre()
+    {
+        // Try Parse VideoID Input into int and put in VideoID
+        if(!int.TryParse(VideoIdInputField.text,out VideoID))
+        {
+            Debug.LogWarning("VideoID Input cannot be parse into int.");
+        }
 
         // Start recording Head Movement
         startRecording = true;

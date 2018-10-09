@@ -1,5 +1,4 @@
-﻿using TMPro;
-using System.IO;
+﻿using System.IO;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -16,7 +15,6 @@ public class QuestionnaireInput : MonoBehaviour
 
     [Header("Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas")]
     public GameObject Ending;
-    public TextMeshProUGUI CountDown;
 
     // Questionnaire objects
     public GameObject QuestionnaireObject;
@@ -26,8 +24,6 @@ public class QuestionnaireInput : MonoBehaviour
     public GameObject[] Targets;
 
     private DataCollector dataCollector;
-    private float CountDownTimer = 5.0f;
-    private float CountDownScale = 1.0f;
     private int ChoiceIndex = 0;
 
     // Device property to provide easy access to controller.
@@ -89,45 +85,18 @@ public class QuestionnaireInput : MonoBehaviour
             if(Controller.GetHairTriggerDown())
             {
                 RecordData();
-                videoScript.ChangeToNextVideo();
+                //videoScript.ChangeToNextVideo();
 
                 // if still have video to play
-                if (videoPlayer.enabled)
-                {
-                    CountDown.gameObject.SetActive(true);
-                }
-                else
-                {
-                    Ending.SetActive(true);
-                }
+                //if (videoPlayer.enabled)
+                //{
+                //    CountDown.gameObject.SetActive(true);
+                //}
+                //else
+                //{
+                Ending.SetActive(true);
+                //}
                 QuestionnaireObject.SetActive(false);
-            }
-        }
-
-        if(CountDown.gameObject.activeSelf)
-        {
-            // Start Counting down
-            CountDownTimer -= Time.deltaTime;
-            CountDown.text = Mathf.CeilToInt(CountDownTimer).ToString();
-
-            // Scale down every second
-            CountDownScale -= Time.deltaTime;
-            CountDown.transform.localScale = new Vector3(CountDownScale, CountDownScale, CountDownScale);
-
-            // Pop back to full size every next second
-            if(CountDownScale <= 0.0f)
-            {
-                CountDownScale = 1.0f;
-            }
-            
-            if(CountDownTimer <= 0.0f)
-            {
-                // Reset Countdown then play next video
-                CountDownTimer = 5.0f;
-                CountDownScale = 1.0f;
-                CountDown.transform.localScale = new Vector3(CountDownScale, CountDownScale, CountDownScale);
-                videoPlayer.Play();
-                CountDown.gameObject.SetActive(false);
             }
         }
     }

@@ -27,6 +27,7 @@ public class IntroFadeOut : MonoBehaviour
     private TextMeshProUGUI Ending_Text;
 
     private Video videoScript;
+    private CountDown countDownScript;
 
     // Use this for initialization
     void Start ()
@@ -72,8 +73,9 @@ public class IntroFadeOut : MonoBehaviour
             Ending_Text = Ending.transform.Find("Ending Panel").Find("TextMeshPro Text").GetComponent<TextMeshProUGUI>();
         }
 
-        // Get Video Script
+        // Get Scripts
         videoScript = GetComponent<Video>();
+        countDownScript = GetComponent<CountDown>();
     }
 	
     private Color Fade(Color color)
@@ -131,14 +133,16 @@ public class IntroFadeOut : MonoBehaviour
             {
                 // Play videos
                 Instruction.SetActive(false);
-                videoScript.videoPlayer.Play();
+                countDownScript.CountDownTMP.gameObject.SetActive(true);
+                //videoScript.videoPlayer.Play();
             }
 
             // Skip Insturction
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Instruction.SetActive(false);
-                videoScript.videoPlayer.Play();
+                countDownScript.CountDownTMP.gameObject.SetActive(true);
+                //videoScript.videoPlayer.Play();
             }
         }
         // When Ending is active
