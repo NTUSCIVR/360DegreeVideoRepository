@@ -25,12 +25,10 @@ public class IntroFadeOut : MonoBehaviour
     public GameObject Ending;
     private Image Ending_Panel;
     private TextMeshProUGUI Ending_Text;
-
-    private Video videoScript;
+    
     private CountDown countDownScript;
-
-    // Use this for initialization
-    void Start ()
+    
+    private void Start ()
     {
         // Ensure there's Brefing to set
 		if(!Briefing)
@@ -72,9 +70,7 @@ public class IntroFadeOut : MonoBehaviour
             Ending_Panel = Ending.transform.Find("Ending Panel").GetComponent<Image>();
             Ending_Text = Ending.transform.Find("Ending Panel").Find("TextMeshPro Text").GetComponent<TextMeshProUGUI>();
         }
-
-        // Get Scripts
-        videoScript = GetComponent<Video>();
+        
         countDownScript = GetComponent<CountDown>();
     }
 	
@@ -92,9 +88,8 @@ public class IntroFadeOut : MonoBehaviour
         }
         return Temp;
     }
-
-	// Update is called once per frame
-	void Update ()
+    
+    private void Update ()
     {
         // When Briefing is active
         if(Briefing.activeSelf)
@@ -134,7 +129,6 @@ public class IntroFadeOut : MonoBehaviour
                 // Play videos
                 Instruction.SetActive(false);
                 countDownScript.CountDownTMP.gameObject.SetActive(true);
-                //videoScript.videoPlayer.Play();
             }
 
             // Skip Insturction
@@ -142,7 +136,6 @@ public class IntroFadeOut : MonoBehaviour
             {
                 Instruction.SetActive(false);
                 countDownScript.CountDownTMP.gameObject.SetActive(true);
-                //videoScript.videoPlayer.Play();
             }
         }
         // When Ending is active

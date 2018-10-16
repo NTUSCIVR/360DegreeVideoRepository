@@ -4,17 +4,19 @@ using UnityEngine.Video;
 
 public class CountDown : MonoBehaviour
 {
-
-    [Tooltip("Sphere that envelops [CameraRig]")]
-    public VideoPlayer videoPlayer;
-
     [Header("Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas")]
     public TextMeshProUGUI CountDownTMP;
 
+    private VideoPlayer videoPlayer;
     private float CountDownTimer = 5.0f;
     private float CountDownScale = 1.0f;
 
-	void Update ()
+    private void Start()
+    {
+        videoPlayer = GetComponent<Video>().videoPlayer;
+    }
+
+    private void Update ()
     {
         if (CountDownTMP.gameObject.activeSelf)
         {

@@ -6,10 +6,7 @@ public class QuestionnaireInput : MonoBehaviour
 {
     // Reference to the object being tracked. // Controller, in this case.
     private SteamVR_TrackedObject trackedObj;
-
-    [Tooltip("Sphere that envelops [CameraRig]")]
-    public VideoPlayer videoPlayer;
-
+    
     [Header("In Script GameObject")]
     public Video videoScript;
 
@@ -23,6 +20,7 @@ public class QuestionnaireInput : MonoBehaviour
     [Tooltip("Under Ring Images GameObject")]
     public GameObject[] Targets;
 
+    private VideoPlayer videoPlayer;
     private DataCollector dataCollector;
     private int ChoiceIndex = 0;
 
@@ -32,15 +30,15 @@ public class QuestionnaireInput : MonoBehaviour
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
     }
-
-    // Use this for initialization
-    void Start()
+    
+    private void Start()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         if (DataCollector.Instance != null)
         {
             dataCollector = DataCollector.Instance;
         }
+        videoPlayer = videoScript.videoPlayer;
     }
 
     private void RecordData()
@@ -51,9 +49,8 @@ public class QuestionnaireInput : MonoBehaviour
         sw.WriteLine(url + "," + rating);
         sw.Close();
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    private void Update()
     {
         if (QuestionnaireObject.activeSelf)
         {
@@ -85,6 +82,9 @@ public class QuestionnaireInput : MonoBehaviour
             if(Controller.GetHairTriggerDown())
             {
                 RecordData();
+
+                // Enable this section of commented codes when need to play multiple videos at one go
+                // Disable this section of commented codes when only need to play one video
                 //videoScript.ChangeToNextVideo();
 
                 // if still have video to play
@@ -94,8 +94,13 @@ public class QuestionnaireInput : MonoBehaviour
                 //}
                 //else
                 //{
-                Ending.SetActive(true);
+                //Ending.SetActive(true);
                 //}
+
+                // Enable this line of code when only need to play one video
+                // Disable this line of code when need to play multiple videos at one go
+                Ending.SetActive(true);
+
                 QuestionnaireObject.SetActive(false);
             }
         }

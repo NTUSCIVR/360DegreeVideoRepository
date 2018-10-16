@@ -10,7 +10,7 @@ public class DataCollector : MonoBehaviour
     [Tooltip("Time interval to collect Headset Position & Rotation. Default: 1.0f")]
     public float dataRecordInterval = 1f;
     
-    [Header("Under [CameraRig] -> Camera(head) -> Camera(eye) -> Canvas")]
+    [Header("Canvas")]
     [Tooltip("ID Input Field")]
     public InputField inputField;
     public InputField VideoIdInputField;
@@ -46,7 +46,7 @@ public class DataCollector : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update ()
+    private void Update ()
     {
         if(startRecording)
         {
