@@ -56,6 +56,7 @@ public class Video : MonoBehaviour
         }
     }
 
+    // Runs at the start of first frame
     private void Start ()
     {
         // Initiate List
